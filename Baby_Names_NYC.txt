@@ -1,0 +1,82 @@
+Prepare phase
+	Querying the dataset 
+	SELECT *
+	FROM dbo.Popular_Baby_Names
+
+Process phase
+	Converting Count datatype column from VARCHAR to INTEGER
+	SELECT CAST(count as INT) as counted
+	FROM dbo.Popular_Baby_Names
+
+	ALTER TABLE dbo.popular_Baby_Names
+	ADD Counted INT
+
+	UPDATE dbo.Popular_Baby_Names
+	SET Counted = CAST(count as INT)
+
+	Converting the Rank datatype column from VARCHAR to INTEGER
+	SELECT CAST(rank as INT) as ranked
+	FROM dbo.Popular_Baby_Names
+
+	ALTER TABLE dbo.popular_Baby_Names
+	ADD ranked INT
+
+	UPDATE dbo.Popular_Baby_Names
+	SET ranked = CAST(rank as INT)
+
+	Removing Duplicates
+	SELECT DISTINCT *
+	FROM dbo.Popular_Baby_Names
+
+Analyze Phase
+	Percentage of childbirth by ethnicity
+	SELECT DISTINCT Ethnicity, COUNT(*) as Participants
+	FROM dbo.Popular_Baby_Names
+	GROUP BY Ethnicity
+
+	Percentage of Female to Male child birth
+	SELECT Gender, COUNT(1) as childbirth_rate
+	FROM dbo.Popular_Baby_Names
+	GROUP BY Gender
+
+	Annual Female and Male child birth
+	SELECT Gender, [Year of Birth], SUM(counted) as birthrate
+	FROM dbo.Popular_Baby_Names
+	GROUP BY Gender, [Year of Birth]
+	ORDER BY Gender
+    
+	Annual count of most popular Baby Names
+	SELECT DISTINCT [Child's First Name], Ethnicity, [Year of Birth], ranked, counted
+	FROM dbo.Popular_Baby_Names
+	WHERE Ethnicity = 'Hispanic'
+	ORDER BY 5 DESC
+	OFFSET 0 Rows
+	FETCH NEXT 5 ROWS ONLY
+
+	SELECT DISTINCT [Child's First Name], Ethnicity, [Year of Birth], ranked, counted
+	FROM dbo.Popular_Baby_Names
+	WHERE Ethnicity = 'White Non Hispanic'
+	ORDER BY 5 DESC
+	OFFSET 0 Rows
+	FETCH NEXT 5 ROWS ONLY
+
+	SELECT DISTINCT [Child's First Name], Ethnicity, [Year of Birth], ranked, counted
+	FROM dbo.Popular_Baby_Names
+	WHERE Ethnicity = 'black non hispanic'
+	ORDER BY 5 DESC
+	OFFSET 0 Rows
+	FETCH NEXT 5 ROWS ONLY
+
+	SELECT DISTINCT [Child's First Name], Ethnicity, [Year of Birth], ranked, counted
+	FROM dbo.Popular_Baby_Names
+	WHERE Ethnicity = 'Asian and Pacific Islander'
+	ORDER BY 5 DESC
+	OFFSET 0 Rows
+	FETCH NEXT 5 ROWS ONLY
+
+
+	Matching Most Common Baby Names with their gender
+	SELECT DISTINCT Gender, [Child's First Name]
+	FROM dbo.Popular_Baby_Names
+	WHERE [Child's First Name] IN ('Ethan', 'Jayden', 'Muhammad', 'Noah', 'Liam', 'David', 'Joseph', 'Michael')
+
